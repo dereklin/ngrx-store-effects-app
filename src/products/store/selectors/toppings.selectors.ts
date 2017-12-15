@@ -11,6 +11,8 @@ export const getToppingState = createSelector(fromFeature.getProductsState, (sta
 
 export const getToppingsEntities = createSelector(getToppingState, fromToppings.getToppingsEntities);
 
+export const getSelectedToppings = createSelector(getToppingState, fromToppings.getSelectedToppings);
+
 export const getAllToppings = createSelector(getToppingsEntities, (entities) => {
   return Object.keys(entities).map((id) => {
     return entities[parseInt(id, 10)];
