@@ -3,7 +3,7 @@ import * as fromPizzas from '../actions/pizzas.action';
 import { Pizza } from '../../models/pizza.model';
 
 export interface PizzaState {
-  entities: {[id: number]: Pizza};
+  entities: { [id: number]: Pizza };
   loaded: boolean;
   loading: boolean;
 }
@@ -19,7 +19,7 @@ export function reducer(
   action: fromPizzas.PizzasAction
 ): PizzaState {
 
-  switch(action.type) {
+  switch (action.type) {
     case fromPizzas.LOAD_PIZZAS: {
       return {
         ...state,
@@ -28,14 +28,14 @@ export function reducer(
     }
     case fromPizzas.LOAD_PIZZAS_SUCCESS: {
       const pizzas = action.payload;
-      const entities = pizzas.reduce((entities: {[id: number]: Pizza}, pizza: Pizza) => {
+      const entities = pizzas.reduce((entities: { [id: number]: Pizza }, pizza: Pizza) => {
         return {
           ...entities,
           [pizza.id]: pizza
         }
       }, {
-        ...state.entities
-      });
+          ...state.entities
+        });
       return {
         ...state,
         loading: false,
@@ -51,6 +51,7 @@ export function reducer(
       }
     }
 
+    case fromPizzas.UPDATE_PIZZA_SUCCESS:
     case fromPizzas.CREATE_PIZZA_SUCCESS: {
       const pizza = action.payload;
       const entities = {
@@ -62,6 +63,16 @@ export function reducer(
         entities
       }
     }
+
+    case fromPizzas.REMOVE_PIZZA_SUCCESS: {
+      const pizza = action.payload;
+      const { [pizza.id]: removed, ...entities } = state.entities;
+      return {
+        ...state,
+        entities
+      }
+    }
+    
   }
   return state;
 }

@@ -26,20 +26,53 @@ export class PizzasEffects {
       )
     })
     )
+
   @Effect()
   createPizzas$ = this.actions$.ofType(pizzaActions.CREATE_PIZZA)
     .pipe(
-      map((action: pizzaActions.CreatePizza) => action.payload),
+    map((action: pizzaActions.CreatePizza) => action.payload),
+    switchMap((pizza) => {
+      return this.pizzaService.createPizza(pizza).pipe(
+        map((pizza) => {
+          return new pizzaActions.CreatePizzaSuccess(pizza);
+        }),
+        catchError((error) => {
+          return of(new pizzaActions.CreatePizzaFail(error));
+        })
+      )
+    })
+    )
+
+  @Effect()
+  updatePizzas$ = this.actions$.ofType(pizzaActions.UPDATE_PIZZA)
+    .pipe(
+    map((action: pizzaActions.UpdatePizza) => action.payload),
+    switchMap((pizza) => {
+      return this.pizzaService.updatePizza(pizza).pipe(
+        map((pizza) => {
+          return new pizzaActions.UpdatePizzaSuccess(pizza);
+        }),
+        catchError((error) => {
+          return of(new pizzaActions.UpdatePizzaFail(error));
+        })
+      )
+    })
+    )
+
+    @Effect()
+    removePizzas$ = this.actions$.ofType(pizzaActions.REMOVE_PIZZA)
+      .pipe(
+      map((action: pizzaActions.RemovePizza) => action.payload),
       switchMap((pizza) => {
-        return this.pizzaService.createPizza(pizza).pipe(
-          map((pizza) => {
-            return new pizzaActions.CreatePizzaSuccess(pizza);
+        return this.pizzaService.removePizza(pizza).pipe(
+          map(() => {
+            return new pizzaActions.RemovePizzaSuccess(pizza);
           }),
           catchError((error) => {
-            return of(new pizzaActions.CreatePizzaFail(error));
+            return of(new pizzaActions.RemovePizzaFail(error));
           })
         )
       })
-    )
-
+      )
+  
 }
