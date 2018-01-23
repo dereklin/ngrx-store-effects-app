@@ -55,15 +55,15 @@ describe('ToppingsEffects', () => {
     spyOn(service, 'getToppings').and.returnValue(of(toppings));
   });
 
-  describe('loadToppings$', marbles((m) => {
-    it('should return a collection from LoadToppingsSuccess', () => {
+  describe('loadToppings$', () => {
+    it('should return a collection from LoadToppingsSuccess', marbles((m) => {
       const action = new fromActions.LoadToppings();
       const completion = new fromActions.LoadToppingsSuccess(toppings);
 
       actions$.stream = m.hot('-a', { a: action });
       const expected = m.cold('-b', { b: completion });
-
+      
       m.expect(effects.loadToppings$).toBeObservable(expected);
-    });
-  }));
+    }));
+  });
 });
