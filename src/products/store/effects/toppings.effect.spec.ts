@@ -4,6 +4,7 @@ import { TestBed } from '@angular/core/testing';
 import { Actions } from '@ngrx/effects';
 
 import { hot, cold } from 'jasmine-marbles';
+import { marbles } from "rxjs-marbles";
 import { Observable } from 'rxjs/Observable';
 import { empty } from 'rxjs/observable/empty';
 import { of } from 'rxjs/observable/of';
@@ -54,15 +55,15 @@ describe('ToppingsEffects', () => {
     spyOn(service, 'getToppings').and.returnValue(of(toppings));
   });
 
-  describe('loadToppings$', () => {
+  describe('loadToppings$', marbles((m) => {
     it('should return a collection from LoadToppingsSuccess', () => {
       const action = new fromActions.LoadToppings();
       const completion = new fromActions.LoadToppingsSuccess(toppings);
 
-      actions$.stream = hot('-a', { a: action });
-      const expected = cold('-b', { b: completion });
+      actions$.stream = m.hot('-a', { a: action });
+      const expected = m.cold('-b', { b: completion });
 
-      expect(effects.loadToppings$).toBeObservable(expected);
+      m.expect(effects.loadToppings$).toBeObservable(expected);
     });
-  });
+  }));
 });
